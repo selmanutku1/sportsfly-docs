@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sporcu Ekle - SportsFly</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="add-athlete.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                SportsFly Belge Yönetimi
+            </div>
+            <div class="navbar-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="material-icons">people</i>
+                    Sporcular
+                </a>
+                <a href="add-athlete.html" class="nav-link active">
+                    <i class="material-icons">person_add</i>
+                    Sporcu Ekle
+                </a>
+                <a href="documents.html" class="nav-link">
+                    <i class="material-icons">folder</i>
+                    Belgeler
+                </a>
+            </div>
+            <button class="menu-toggle">
+                <i class="material-icons">menu</i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Yeni Sporcu Ekle</h1>
+            
+            <form id="addAthleteForm" class="form-container">
+                <!-- Kişisel Bilgiler -->
+                <div class="form-section">
+                    <h2>Kişisel Bilgiler</h2>
+                    <div class="form-group">
+                        <label for="athleteName">Ad Soyad</label>
+                        <input type="text" id="athleteName" name="athleteName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birthDate">Doğum Tarihi</label>
+                            <input type="date" id="birthDate" name="birthDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="branch">Branş</label>
+                            <select id="branch" name="branch" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Futbol">Futbol</option>
+                                <option value="Basketbol">Basketbol</option>
+                                <option value="Voleybol">Voleybol</option>
+                                <option value="Tenis">Tenis</option>
+                                <option value="Yüzme">Yüzme</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İletişim Bilgileri -->
+                <div class="form-section">
+                    <h2>İletişim Bilgileri</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefon</label>
+                            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="5XX XXX XXXX" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-posta</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Adres</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Belgeler -->
+                <div class="form-section">
+                    <h2>Belgeler</h2>
+                    <div class="document-grid">
+                        <div class="document-upload">
+                            <label for="healthReport">
+                                <i class="material-icons">local_hospital</i>
+                                Sağlık Raporu
+                            </label>
+                            <input type="file" id="healthReport" name="healthReport" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="document-upload">
+                            <label for="license">
+                                <i class="material-icons">card_membership</i>
+                                Sporcu Lisansı
+                            </label>
+                            <input type="file" id="license" name="license" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="document-upload">
+                            <label for="education">
+                                <i class="material-icons">school</i>
+                                Öğrenim Belgesi
+                            </label>
+                            <input type="file" id="education" name="education" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="document-upload">
+                            <label for="parentPermission">
+                                <i class="material-icons">family_restroom</i>
+                                Veli İzin Belgesi
+                            </label>
+                            <input type="file" id="parentPermission" name="parentPermission" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="document-upload">
+                            <label for="resume">
+                                <i class="material-icons">description</i>
+                                Özgeçmiş
+                            </label>
+                            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="document-upload">
+                            <label for="contract">
+                                <i class="material-icons">assignment</i>
+                                Sözleşme
+                            </label>
+                            <input type="file" id="contract" name="contract" accept=".pdf">
+                        </div>
+                        <div class="document-upload">
+                            <label for="idCopy">
+                                <i class="material-icons">badge</i>
+                                Kimlik Fotokopisi
+                            </label>
+                            <input type="file" id="idCopy" name="idCopy" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="document-upload">
+                            <label for="powerOfAttorney">
+                                <i class="material-icons">gavel</i>
+                                Vekaletname
+                            </label>
+                            <input type="file" id="powerOfAttorney" name="powerOfAttorney" accept=".pdf">
+                        </div>
+                        <div class="document-upload">
+                            <label for="waiver">
+                                <i class="material-icons">note_alt</i>
+                                Feragatname
+                            </label>
+                            <input type="file" id="waiver" name="waiver" accept=".pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">save</i>
+                        Kaydet
+                    </button>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="material-icons">cancel</i>
+                        İptal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="add-athlete.js"></script>
+</body>
+</html>
