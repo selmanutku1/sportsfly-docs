@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsFly Belge Yönetimi</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="navbar.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                SportsFly Belge Yönetimi
+            </div>
+            <div class="navbar-menu">
+                <a href="index.html" class="nav-link active">
+                    <i class="material-icons">people</i>
+                    Sporcular
+                </a>
+                <a href="add-athlete.html" class="nav-link">
+                    <i class="material-icons">person_add</i>
+                    Sporcu Ekle
+                </a>
+                <a href="documents.html" class="nav-link">
+                    <i class="material-icons">folder</i>
+                    Belgeler
+                </a>
+            </div>
+            <button class="menu-toggle">
+                <i class="material-icons">menu</i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="header-actions">
+                <h1>Sporcular</h1>
+                <a href="add-athlete.html" class="btn btn-primary">
+                    <i class="material-icons">person_add</i>
+                    Yeni Sporcu Ekle
+                </a>
+            </div>
+
+            <div class="search-bar">
+                <div class="search-input">
+                    <i class="material-icons">search</i>
+                    <input type="text" id="searchInput" placeholder="Sporcu ara...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-outline" data-filter="all">Tümü</button>
+                    <button class="btn btn-outline" data-filter="missing">Eksik Belgeli</button>
+                    <button class="btn btn-outline" data-filter="complete">Belgeleri Tam</button>
+                </div>
+            </div>
+
+            <div class="athletes-grid" id="athletesGrid">
+                <!-- Sporcu kartları buraya dinamik olarak eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
