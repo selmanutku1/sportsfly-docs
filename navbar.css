@@ -14,18 +14,7 @@
 }
 
 .navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-.navbar-brand i {
-    font-size: 2rem;
-    color: var(--primary-color);
+    width: 48px;
 }
 
 .navbar-toggle {
@@ -53,11 +42,12 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: var(--border-radius);
     transition: all 0.3s;
+    font-weight: 500;
 }
 
 .navbar-menu a i {
@@ -117,6 +107,7 @@
 
     .navbar-menu a {
         width: 100%;
+        padding: 0.5rem 0.75rem;
     }
 }
 

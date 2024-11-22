@@ -37,7 +37,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
-    padding-top: 64px; /* Navbar yüksekliği kadar padding */
+    padding-top: 64px;
     min-height: 100vh;
 }
 
@@ -45,7 +45,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .page-header {
@@ -132,7 +132,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .document-card {
@@ -190,7 +190,7 @@ body {
 
 .document-note {
     background: var(--background-color);
-    padding: 0.5rem;
+    padding: 0.75rem;
     border-radius: var(--border-radius);
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -265,6 +265,31 @@ body {
     background: var(--hover-color);
 }
 
+/* Boş Durum */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
 /* Mobil Uyumluluk */
 @media (max-width: 768px) {
     .container {
@@ -302,29 +327,4 @@ body {
     .document-card {
         margin-bottom: 1rem;
     }
-}
-
-/* Boş Durum */
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    background: var(--surface-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-}
-
-.empty-state i {
-    font-size: 4rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
-}
-
-.empty-state h2 {
-    color: var(--text-color);
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
 }
