@@ -1,16 +1,17 @@
-# SportsFly Belge Yönetimi
+# SportsFly Belge Yönetim Sistemi
 
-Spor okullarında sporcuların belgelerini yönetmek için geliştirilmiş web tabanlı bir uygulama.
+Spor okulları için geliştirilmiş, sporcu belgelerini yönetmek ve takip etmek için kullanılan web tabanlı bir belge yönetim sistemi.
 
 ## Özellikler
 
-- Sporcu ekleme ve listeleme
-- Belge yükleme ve takip
-- Eksik belge kontrolü
-- Arama ve filtreleme
+- 9 farklı belge türü desteği
+- Gelişmiş belge arama ve filtreleme
 - Mobil uyumlu tasarım
+- Yerel depolama (localStorage) desteği
+- Sürükle-bırak dosya yükleme
+- Belge durumu takibi
 
-## Belge Türleri
+### Desteklenen Belge Türleri
 
 1. Sağlık Raporu
 2. Sporcu Lisansı
@@ -22,35 +23,27 @@ Spor okullarında sporcuların belgelerini yönetmek için geliştirilmiş web t
 8. Vekaletname
 9. Feragatname
 
-## Teknik Detaylar
+## Teknolojiler
 
-- Frontend: HTML, CSS, JavaScript
-- Veri Depolama: localStorage
-- Responsive Design
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- LocalStorage API
 - Material Design Icons
 
 ## Kurulum
 
-1. Repository'yi klonlayın:
-```bash
-git clone https://github.com/selmanutku1/sportsfly-docs.git
-```
+1. Projeyi bilgisayarınıza klonlayın
+2. `index.html` dosyasını bir web tarayıcısında açın
 
-2. Proje dizinine gidin:
-```bash
-cd sportsfly-docs
-```
+## Planlanan Özellikler
 
-3. `index.html` dosyasını bir web tarayıcısında açın.
-
-## Geliştirme
-
-Projeyi geliştirmek için:
-
-1. Yeni bir branch oluşturun
-2. Değişikliklerinizi yapın
-3. Pull request gönderin
+- [ ] Backend entegrasyonu
+- [ ] Kullanıcı kimlik doğrulama
+- [ ] Bulut depolama desteği
+- [ ] Çoklu dil desteği
+- [ ] Gelişmiş raporlama özellikleri
 
 ## Lisans
 
-MIT
+Bu proje MIT lisansı altında lisanslanmıştır.

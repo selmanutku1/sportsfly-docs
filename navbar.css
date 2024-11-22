@@ -1,54 +1,66 @@
+/* Navbar */
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background-color: var(--white);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--surface-color);
+    box-shadow: var(--shadow);
     z-index: 1000;
-}
-
-.navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    height: 64px;
+    padding: 0.75rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .navbar-brand {
-    font-size: 20px;
-    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand a {
     color: var(--primary-color);
     text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand i {
+    font-size: 1.75rem;
 }
 
 .navbar-menu {
     display: flex;
-    gap: 16px;
+    gap: 1rem;
 }
 
-.nav-link {
+.navbar-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
     color: var(--text-secondary);
     text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    border-radius: var(--border-radius);
+    transition: all 0.3s;
 }
 
-.nav-link:hover {
-    background-color: var(--background-color);
+.navbar-item:hover {
+    background: var(--hover-color);
     color: var(--primary-color);
 }
 
-.nav-link.active {
+.navbar-item.active {
+    background: var(--primary-light);
     color: var(--primary-color);
-    background-color: var(--primary-light);
+}
+
+.navbar-item i {
+    font-size: 1.25rem;
 }
 
 .menu-toggle {
@@ -57,27 +69,48 @@
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 8px;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
 }
 
+.menu-toggle:hover {
+    background: var(--hover-color);
+    color: var(--primary-color);
+}
+
+/* Mobil Uyumluluk */
 @media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
     .navbar-menu {
-        display: none;
-        position: absolute;
+        position: fixed;
         top: 64px;
         left: 0;
         right: 0;
-        background-color: var(--white);
+        background: var(--surface-color);
+        padding: 1rem;
         flex-direction: column;
-        padding: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        gap: 0.5rem;
+        box-shadow: var(--shadow);
+        display: none;
     }
 
     .navbar-menu.active {
         display: flex;
     }
 
-    .menu-toggle {
-        display: block;
+    .navbar-item {
+        padding: 0.75rem 1rem;
     }
+}
+
+/* Ana içeriği navbar altında başlat */
+body {
+    padding-top: 64px;
 }
