@@ -74,7 +74,6 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    align-items: center;
 }
 
 .search-box {
@@ -109,6 +108,7 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .filter-group select {
@@ -125,6 +125,30 @@ body {
 .filter-group select:focus {
     outline: none;
     border-color: var(--primary-color);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--surface-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: var(--hover-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-secondary i {
+    font-size: 1.25rem;
 }
 
 /* Belge Grid */
@@ -255,16 +279,6 @@ body {
     background: var(--primary-dark);
 }
 
-.btn-secondary {
-    background: var(--surface-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-    background: var(--hover-color);
-}
-
 /* Boş Durum */
 .empty-state {
     text-align: center;
@@ -310,14 +324,17 @@ body {
         flex-direction: column;
     }
 
-    .filter-group select {
+    .filter-group select,
+    .filter-group .btn-secondary {
         width: 100%;
-        min-width: unset;
     }
 
-    .btn {
-        width: 100%;
+    .btn-secondary {
         justify-content: center;
+    }
+
+    .btn-secondary span {
+        display: none;
     }
 
     .document-grid {

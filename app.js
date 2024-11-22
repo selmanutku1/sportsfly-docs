@@ -7,6 +7,7 @@ const dateFilter = document.getElementById('dateFilter');
 const emptyState = document.getElementById('emptyState');
 const navbarToggle = document.querySelector('.navbar-toggle');
 const navbarMenu = document.querySelector('.navbar-menu');
+const applyFilters = document.getElementById('applyFilters');
 
 // Mobil menü toggle
 navbarToggle.addEventListener('click', () => {
@@ -99,59 +100,60 @@ function formatDate(date) {
     });
 }
 
-// Belgeleri filtrele
-function filterDocuments() {
+// Filtreleme işlemleri
+applyFilters.addEventListener('click', () => {
     const searchTerm = searchInput.value.toLowerCase();
-    const selectedType = documentTypeFilter.value;
-    const selectedAthlete = athleteFilter.value;
-    const selectedDate = dateFilter.value;
+    const documentType = documentTypeFilter.value;
+    const athlete = athleteFilter.value;
+    const date = dateFilter.value;
 
-    let filteredDocs = documents;
+    // Tüm belgeleri al
+    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
 
-    // Arama filtresi
-    if (searchTerm) {
-        filteredDocs = filteredDocs.filter(doc =>
-            doc.athlete.toLowerCase().includes(searchTerm) ||
-            doc.fileName.toLowerCase().includes(searchTerm) ||
-            (doc.note && doc.note.toLowerCase().includes(searchTerm))
-        );
-    }
-
-    // Belge türü filtresi
-    if (selectedType) {
-        filteredDocs = filteredDocs.filter(doc => doc.type === selectedType);
-    }
-
-    // Sporcu filtresi
-    if (selectedAthlete) {
-        filteredDocs = filteredDocs.filter(doc => doc.athlete === selectedAthlete);
-    }
-
-    // Tarih filtresi
-    if (selectedDate) {
-        const now = new Date();
-        const docDate = new Date();
-        filteredDocs = filteredDocs.filter(doc => {
+    // Filtreleme işlemi
+    const filteredDocuments = documents.filter(doc => {
+        const matchSearch = doc.title.toLowerCase().includes(searchTerm) ||
+                          doc.athlete.toLowerCase().includes(searchTerm) ||
+                          doc.note.toLowerCase().includes(searchTerm);
+        
+        const matchType = !documentType || doc.type === documentType;
+        const matchAthlete = !athlete || doc.athlete === athlete;
+        
+        let matchDate = true;
+        if (date) {
             const docDate = new Date(doc.date);
-            switch (selectedDate) {
-                case 'today':
-                    return docDate.toDateString() === now.toDateString();
-                case 'week':
-                    const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
-                    return docDate >= weekAgo;
-                case 'month':
-                    return docDate.getMonth() === now.getMonth() &&
-                           docDate.getFullYear() === now.getFullYear();
-                case 'year':
-                    return docDate.getFullYear() === now.getFullYear();
-                default:
-                    return true;
-            }
-        });
-    }
+            const today = new Date();
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(today.getFullYear(), today.getMonth() - 1);
+            const yearAgo = new Date(today.getFullYear() - 1);
 
-    displayDocuments(filteredDocs);
-}
+            switch (date) {
+                case 'today':
+                    matchDate = docDate.toDateString() === today.toDateString();
+                    break;
+                case 'week':
+                    matchDate = docDate >= weekAgo;
+                    break;
+                case 'month':
+                    matchDate = docDate >= monthAgo;
+                    break;
+                case 'year':
+                    matchDate = docDate >= yearAgo;
+                    break;
+            }
+        }
+
+        return matchSearch && matchType && matchAthlete && matchDate;
+    });
+
+    // Belgeleri göster
+    displayDocuments(filteredDocuments);
+});
+
+// Arama alanında her değişiklikte filtreleme yap
+searchInput.addEventListener('input', () => {
+    applyFilters.click();
+});
 
 // Belgeleri görüntüle
 function displayDocuments(docs) {
@@ -199,7 +201,7 @@ function deleteDocument(id) {
         documents = documents.filter(doc => doc.id !== id);
         localStorage.setItem('documents', JSON.stringify(documents));
         populateAthleteFilter();
-        filterDocuments();
+        applyFilters.click();
     }
 }
 
@@ -216,13 +218,18 @@ function dataURItoBlob(dataURI) {
 }
 
 // Event Listeners
-searchInput.addEventListener('input', filterDocuments);
-documentTypeFilter.addEventListener('change', filterDocuments);
-athleteFilter.addEventListener('change', filterDocuments);
-dateFilter.addEventListener('change', filterDocuments);
+documentTypeFilter.addEventListener('change', () => {
+    applyFilters.click();
+});
+athleteFilter.addEventListener('change', () => {
+    applyFilters.click();
+});
+dateFilter.addEventListener('change', () => {
+    applyFilters.click();
+});
 
 // Sayfa yüklendiğinde
 document.addEventListener('DOMContentLoaded', () => {
     populateAthleteFilter();
-    filterDocuments();
+    applyFilters.click();
 });
