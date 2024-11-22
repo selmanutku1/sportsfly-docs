@@ -1,264 +1,228 @@
-// Sabit veriler
-const REQUIRED_DOCUMENTS = {
-    healthReport: 'Sağlık Raporu',
-    license: 'Sporcu Lisansı',
-    education: 'Öğrenim Belgesi',
-    parentPermission: 'Veli İzin Belgesi',
-    resume: 'Özgeçmiş',
-    contract: 'Sözleşme',
-    idCopy: 'Kimlik Fotokopisi',
-    powerOfAttorney: 'Vekaletname',
-    waiver: 'Feragatname'
-};
-
-// DOM elementleri
-const searchInput = document.getElementById('searchInput');
-const documentTypeSelect = document.getElementById('documentType');
-const athleteSelect = document.getElementById('athleteFilter');
-const dateFilter = document.getElementById('dateFilter');
+// DOM Elementleri
 const documentGrid = document.getElementById('documentGrid');
+const searchInput = document.getElementById('searchInput');
+const documentTypeFilter = document.getElementById('documentTypeFilter');
+const athleteFilter = document.getElementById('athleteFilter');
+const dateFilter = document.getElementById('dateFilter');
+const emptyState = document.getElementById('emptyState');
+const navbarToggle = document.querySelector('.navbar-toggle');
+const navbarMenu = document.querySelector('.navbar-menu');
 
-// Filtreleme olayları
-searchInput.addEventListener('input', filterDocuments);
-documentTypeSelect.addEventListener('change', filterDocuments);
-athleteSelect.addEventListener('change', filterDocuments);
-dateFilter.addEventListener('change', filterDocuments);
+// Mobil menü toggle
+navbarToggle.addEventListener('click', () => {
+    navbarMenu.classList.toggle('active');
+});
 
-// Sporcu listesini yükle
-function loadAthletes() {
-    const athleteSelect = document.getElementById('athleteFilter');
-    const athletes = JSON.parse(localStorage.getItem('athletes') || '[]');
+// Örnek Belgeler (localStorage'dan gelecek)
+let documents = JSON.parse(localStorage.getItem('documents')) || [];
 
-    athletes.forEach(athlete => {
-        const option = document.createElement('option');
-        option.value = athlete.id;
-        option.textContent = athlete.name;
-        athleteSelect.appendChild(option);
-    });
-}
+// Örnek Sporcular (localStorage'dan gelecek)
+let athletes = JSON.parse(localStorage.getItem('athletes')) || [];
 
-// Belgeleri yükle ve göster
-function loadAndDisplayDocuments() {
-    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
-    const athletes = JSON.parse(localStorage.getItem('athletes') || '[]');
-    const documentGrid = document.getElementById('documentGrid');
-    
-    // Grid'i temizle
-    documentGrid.innerHTML = '';
-
-    // Belgeleri göster
-    documents.forEach(doc => {
-        const athlete = athletes.find(a => a.id === doc.athleteId);
-        const card = createDocumentCard(doc, athlete);
-        documentGrid.appendChild(card);
+// Sporcu filtresini doldur
+function populateAthleteFilter() {
+    const uniqueAthletes = [...new Set(documents.map(doc => doc.athlete))];
+    athleteFilter.innerHTML = '<option value="">Sporcu</option>';
+    uniqueAthletes.forEach(athlete => {
+        athleteFilter.innerHTML += `<option value="${athlete}">${athlete}</option>`;
     });
 }
 
 // Belge kartı oluştur
-function createDocumentCard(doc, athlete) {
+function createDocumentCard(doc) {
     const card = document.createElement('div');
     card.className = 'document-card';
-    
-    const documentTypes = {
-        healthReport: { icon: 'local_hospital', name: 'Sağlık Raporu' },
-        license: { icon: 'card_membership', name: 'Sporcu Lisansı' },
-        education: { icon: 'school', name: 'Öğrenim Belgesi' },
-        parentPermission: { icon: 'family_restroom', name: 'Veli İzin Belgesi' },
-        resume: { icon: 'description', name: 'Özgeçmiş' },
-        contract: { icon: 'assignment', name: 'Sözleşme' },
-        idCopy: { icon: 'badge', name: 'Kimlik Fotokopisi' },
-        powerOfAttorney: { icon: 'gavel', name: 'Vekaletname' },
-        waiver: { icon: 'note_alt', name: 'Feragatname' }
-    };
-
-    const docType = documentTypes[doc.type];
-    
     card.innerHTML = `
         <div class="document-icon">
-            <i class="material-icons">${docType.icon}</i>
+            <i class="material-icons">${getDocumentIcon(doc.type)}</i>
         </div>
         <div class="document-info">
-            <h3>${docType.name}</h3>
-            <p class="athlete-name">${athlete ? athlete.name : 'Sporcu Bulunamadı'}</p>
-            <p class="document-date">${formatDate(doc.date)}</p>
-            ${doc.note ? `<p class="document-note">${doc.note}</p>` : ''}
-            <p class="file-name">${doc.fileName}</p>
+            <h3>${getDocumentTypeName(doc.type)}</h3>
+            <div class="athlete-name">${doc.athlete}</div>
+            <div class="document-date">${formatDate(doc.date)}</div>
+            ${doc.note ? `<div class="document-note">${doc.note}</div>` : ''}
+            <div class="file-name">${doc.fileName}</div>
         </div>
         <div class="document-actions">
-            <button class="btn-icon" onclick="viewDocument('${doc.id}')">
+            <button class="btn-icon" onclick="viewDocument('${doc.id}')" title="Görüntüle">
                 <i class="material-icons">visibility</i>
             </button>
-            <button class="btn-icon" onclick="downloadDocument('${doc.id}')">
+            <button class="btn-icon" onclick="downloadDocument('${doc.id}')" title="İndir">
                 <i class="material-icons">download</i>
             </button>
-            <button class="btn-icon" onclick="deleteDocument('${doc.id}')">
+            <button class="btn-icon" onclick="deleteDocument('${doc.id}')" title="Sil">
                 <i class="material-icons">delete</i>
             </button>
         </div>
     `;
-
     return card;
+}
+
+// Belge türüne göre ikon getir
+function getDocumentIcon(type) {
+    const icons = {
+        'saglik-raporu': 'medical_services',
+        'sporcu-lisansi': 'card_membership',
+        'ogrenim-belgesi': 'school',
+        'veli-izin': 'family_restroom',
+        'ozgecmis': 'person',
+        'sozlesme': 'description',
+        'kimlik': 'badge',
+        'vekaletname': 'gavel',
+        'feragatname': 'assignment'
+    };
+    return icons[type] || 'description';
+}
+
+// Belge türü adını getir
+function getDocumentTypeName(type) {
+    const names = {
+        'saglik-raporu': 'Sağlık Raporu',
+        'sporcu-lisansi': 'Sporcu Lisansı',
+        'ogrenim-belgesi': 'Öğrenim Belgesi',
+        'veli-izin': 'Veli İzin Belgesi',
+        'ozgecmis': 'Özgeçmiş',
+        'sozlesme': 'Sözleşme',
+        'kimlik': 'Kimlik Fotokopisi',
+        'vekaletname': 'Vekaletname',
+        'feragatname': 'Feragatname'
+    };
+    return names[type] || type;
+}
+
+// Tarihi formatla
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 // Belgeleri filtrele
 function filterDocuments() {
     const searchTerm = searchInput.value.toLowerCase();
-    const selectedType = documentTypeSelect.value;
-    const selectedAthlete = athleteSelect.value;
+    const selectedType = documentTypeFilter.value;
+    const selectedAthlete = athleteFilter.value;
     const selectedDate = dateFilter.value;
 
-    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
-    const athletes = JSON.parse(localStorage.getItem('athletes') || '[]');
-    const documentGrid = document.getElementById('documentGrid');
-    
-    // Grid'i temizle
-    documentGrid.innerHTML = '';
+    let filteredDocs = documents;
 
-    // Filtreleme
-    const filteredDocs = documents.filter(doc => {
-        const athlete = athletes.find(a => a.id === doc.athleteId);
-        const athleteName = athlete ? athlete.name.toLowerCase() : '';
-        
-        // Metin araması
-        const matchesSearch = !searchTerm || 
+    // Arama filtresi
+    if (searchTerm) {
+        filteredDocs = filteredDocs.filter(doc =>
+            doc.athlete.toLowerCase().includes(searchTerm) ||
             doc.fileName.toLowerCase().includes(searchTerm) ||
-            athleteName.includes(searchTerm) ||
-            (doc.note && doc.note.toLowerCase().includes(searchTerm));
+            (doc.note && doc.note.toLowerCase().includes(searchTerm))
+        );
+    }
 
-        // Belge türü filtresi
-        const matchesType = !selectedType || doc.type === selectedType;
+    // Belge türü filtresi
+    if (selectedType) {
+        filteredDocs = filteredDocs.filter(doc => doc.type === selectedType);
+    }
 
-        // Sporcu filtresi
-        const matchesAthlete = !selectedAthlete || doc.athleteId === selectedAthlete;
+    // Sporcu filtresi
+    if (selectedAthlete) {
+        filteredDocs = filteredDocs.filter(doc => doc.athlete === selectedAthlete);
+    }
 
-        // Tarih filtresi
-        const matchesDate = !selectedDate || isDateInRange(doc.date, selectedDate);
+    // Tarih filtresi
+    if (selectedDate) {
+        const now = new Date();
+        const docDate = new Date();
+        filteredDocs = filteredDocs.filter(doc => {
+            const docDate = new Date(doc.date);
+            switch (selectedDate) {
+                case 'today':
+                    return docDate.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+                    return docDate >= weekAgo;
+                case 'month':
+                    return docDate.getMonth() === now.getMonth() &&
+                           docDate.getFullYear() === now.getFullYear();
+                case 'year':
+                    return docDate.getFullYear() === now.getFullYear();
+                default:
+                    return true;
+            }
+        });
+    }
 
-        return matchesSearch && matchesType && matchesAthlete && matchesDate;
-    });
-
-    // Filtrelenmiş belgeleri göster
-    filteredDocs.forEach(doc => {
-        const athlete = athletes.find(a => a.id === doc.athleteId);
-        const card = createDocumentCard(doc, athlete);
-        documentGrid.appendChild(card);
-    });
+    displayDocuments(filteredDocs);
 }
 
-// Tarih aralığı kontrolü
-function isDateInRange(dateStr, range) {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+// Belgeleri görüntüle
+function displayDocuments(docs) {
+    documentGrid.innerHTML = '';
     
-    switch(range) {
-        case 'today':
-            return date >= today;
-        case 'week':
-            const weekAgo = new Date(today);
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            return date >= weekAgo;
-        case 'month':
-            const monthAgo = new Date(today);
-            monthAgo.setMonth(monthAgo.getMonth() - 1);
-            return date >= monthAgo;
-        case 'year':
-            const yearAgo = new Date(today);
-            yearAgo.setFullYear(yearAgo.getFullYear() - 1);
-            return date >= yearAgo;
-        default:
-            return true;
+    if (docs.length === 0) {
+        emptyState.style.display = 'block';
+    } else {
+        emptyState.style.display = 'none';
+        docs.forEach(doc => {
+            documentGrid.appendChild(createDocumentCard(doc));
+        });
     }
 }
 
-// Tarih formatlama
-function formatDate(dateStr) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('tr-TR', options);
+// Belge görüntüle
+function viewDocument(id) {
+    const doc = documents.find(d => d.id === id);
+    if (doc && doc.fileData) {
+        const blob = dataURItoBlob(doc.fileData);
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+    }
 }
 
-// Belge görüntüleme
-function viewDocument(docId) {
-    // Belge görüntüleme işlevi
-    alert('Belge görüntüleme özelliği henüz eklenmedi.');
+// Belge indir
+function downloadDocument(id) {
+    const doc = documents.find(d => d.id === id);
+    if (doc && doc.fileData) {
+        const blob = dataURItoBlob(doc.fileData);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = doc.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 }
 
-// Belge indirme
-function downloadDocument(docId) {
-    // Belge indirme işlevi
-    alert('Belge indirme özelliği henüz eklenmedi.');
-}
-
-// Belge silme
-function deleteDocument(docId) {
-    if (confirm('Bu belgeyi silmek istediğinize emin misiniz?')) {
-        let documents = JSON.parse(localStorage.getItem('documents') || '[]');
-        documents = documents.filter(doc => doc.id !== docId);
+// Belge sil
+function deleteDocument(id) {
+    if (confirm('Bu belgeyi silmek istediğinizden emin misiniz?')) {
+        documents = documents.filter(doc => doc.id !== id);
         localStorage.setItem('documents', JSON.stringify(documents));
-        loadAndDisplayDocuments();
-        showNotification('Belge başarıyla silindi!', 'success');
+        populateAthleteFilter();
+        filterDocuments();
     }
 }
 
-// Bildirim gösterme
-function showNotification(message, type = 'info') {
-    // Mevcut bildirimi kaldır
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
+// Data URI'yi Blob'a çevir
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
     }
-
-    // Yeni bildirimi oluştur
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-
-    // Bildirimi sayfaya ekle
-    document.body.appendChild(notification);
-
-    // CSS ekle
-    const style = document.createElement('style');
-    style.textContent = `
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 2rem;
-            border-radius: var(--border-radius);
-            background: var(--surface-color);
-            color: var(--text-color);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        .notification.success {
-            background: var(--success-color);
-            color: white;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Bildirimi otomatik kaldır
-    setTimeout(() => {
-        notification.remove();
-        style.remove();
-    }, 3000);
+    return new Blob([ab], { type: mimeString });
 }
+
+// Event Listeners
+searchInput.addEventListener('input', filterDocuments);
+documentTypeFilter.addEventListener('change', filterDocuments);
+athleteFilter.addEventListener('change', filterDocuments);
+dateFilter.addEventListener('change', filterDocuments);
 
 // Sayfa yüklendiğinde
-document.addEventListener('DOMContentLoaded', function() {
-    loadAthletes();
-    loadAndDisplayDocuments();
+document.addEventListener('DOMContentLoaded', () => {
+    populateAthleteFilter();
+    filterDocuments();
 });

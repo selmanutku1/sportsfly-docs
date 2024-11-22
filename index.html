@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportsFly - Belge Yönetimi</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="navbar.css">
+    <title>SportsFly - Belge Yönetim Sistemi</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-brand">
-            <a href="index.html">
-                <i class="material-icons">sports</i>
-                SportsFly
-            </a>
+            <i class="material-icons">sports</i>
+            <span>SportsFly</span>
         </div>
-        <button class="menu-toggle">
+        <button class="navbar-toggle">
             <i class="material-icons">menu</i>
         </button>
         <div class="navbar-menu">
-            <a href="index.html" class="navbar-item active">
-                <i class="material-icons">home</i>
-                Ana Sayfa
+            <a href="index.html" class="active">
+                <i class="material-icons">folder</i>
+                Belgeler
             </a>
-            <a href="add-document.html" class="navbar-item">
-                <i class="material-icons">note_add</i>
-                Belge Ekle
+            <a href="add-document.html">
+                <i class="material-icons">add_circle</i>
+                Yeni Belge
             </a>
         </div>
     </nav>
 
     <!-- Ana İçerik -->
-    <main class="container">
-        <div class="page-header">
-            <h1>Belge Yönetimi</h1>
-            <p>Tüm sporcuların belgelerini tek bir yerden yönetin.</p>
-        </div>
+    <div class="container">
+        <!-- Başlık -->
+        <header class="page-header">
+            <h1>Belge Yönetim Sistemi</h1>
+            <p>Tüm sporcuların belgelerini tek bir yerden yönetin</p>
+        </header>
 
         <!-- Filtreler -->
         <div class="filters">
@@ -45,45 +44,50 @@
                 <i class="material-icons">search</i>
                 <input type="text" id="searchInput" placeholder="Belge veya sporcu ara...">
             </div>
-
             <div class="filter-group">
-                <select id="documentType">
-                    <option value="">Tüm Belgeler</option>
-                    <option value="healthReport">Sağlık Raporu</option>
-                    <option value="license">Sporcu Lisansı</option>
-                    <option value="education">Öğrenim Belgesi</option>
-                    <option value="parentPermission">Veli İzin Belgesi</option>
-                    <option value="resume">Özgeçmiş</option>
-                    <option value="contract">Sözleşme</option>
-                    <option value="idCopy">Kimlik Fotokopisi</option>
-                    <option value="powerOfAttorney">Vekaletname</option>
-                    <option value="waiver">Feragatname</option>
+                <select id="documentTypeFilter">
+                    <option value="">Belge Türü</option>
+                    <option value="saglik-raporu">Sağlık Raporu</option>
+                    <option value="sporcu-lisansi">Sporcu Lisansı</option>
+                    <option value="ogrenim-belgesi">Öğrenim Belgesi</option>
+                    <option value="veli-izin">Veli İzin Belgesi</option>
+                    <option value="ozgecmis">Özgeçmiş</option>
+                    <option value="sozlesme">Sözleşme</option>
+                    <option value="kimlik">Kimlik Fotokopisi</option>
+                    <option value="vekaletname">Vekaletname</option>
+                    <option value="feragatname">Feragatname</option>
                 </select>
-
                 <select id="athleteFilter">
-                    <option value="">Tüm Sporcular</option>
+                    <option value="">Sporcu</option>
                 </select>
-
                 <select id="dateFilter">
-                    <option value="">Tüm Tarihler</option>
+                    <option value="">Tarih</option>
                     <option value="today">Bugün</option>
-                    <option value="week">Son 1 Hafta</option>
-                    <option value="month">Son 1 Ay</option>
-                    <option value="year">Son 1 Yıl</option>
+                    <option value="week">Bu Hafta</option>
+                    <option value="month">Bu Ay</option>
+                    <option value="year">Bu Yıl</option>
                 </select>
             </div>
-
-            <a href="add-document.html" class="btn btn-primary">
+            <a href="add-document.html" class="btn">
                 <i class="material-icons">add</i>
                 Yeni Belge
             </a>
         </div>
 
-        <!-- Belge Listesi -->
-        <div id="documentGrid" class="document-grid">
-            <!-- Belgeler JavaScript ile eklenecek -->
+        <!-- Belge Grid -->
+        <div class="document-grid" id="documentGrid">
+            <!-- Boş Durum -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="material-icons">folder_open</i>
+                <h2>Henüz belge yok</h2>
+                <p>Yeni belge eklemek için "Yeni Belge" butonuna tıklayın.</p>
+                <a href="add-document.html" class="btn">
+                    <i class="material-icons">add</i>
+                    Yeni Belge Ekle
+                </a>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script src="app.js"></script>
 </body>

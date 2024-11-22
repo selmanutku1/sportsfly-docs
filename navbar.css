@@ -4,41 +4,51 @@
     top: 0;
     left: 0;
     right: 0;
+    height: 64px;
     background: var(--surface-color);
     box-shadow: var(--shadow);
-    z-index: 1000;
-    padding: 0.75rem 2rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    padding: 0 1.5rem;
+    z-index: 1000;
 }
 
 .navbar-brand {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.navbar-brand a {
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--primary-color);
     text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .navbar-brand i {
-    font-size: 1.75rem;
+    font-size: 2rem;
+}
+
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: auto;
+}
+
+.navbar-toggle i {
+    font-size: 1.5rem;
 }
 
 .navbar-menu {
     display: flex;
+    align-items: center;
     gap: 1rem;
+    margin-left: auto;
 }
 
-.navbar-item {
+.navbar-menu a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -49,42 +59,27 @@
     transition: all 0.3s;
 }
 
-.navbar-item:hover {
-    background: var(--hover-color);
-    color: var(--primary-color);
-}
-
-.navbar-item.active {
-    background: var(--primary-light);
-    color: var(--primary-color);
-}
-
-.navbar-item i {
+.navbar-menu a i {
     font-size: 1.25rem;
 }
 
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: var(--border-radius);
+.navbar-menu a:hover {
+    background: var(--hover-color);
+    color: var(--primary-color);
 }
 
-.menu-toggle:hover {
-    background: var(--hover-color);
+.navbar-menu a.active {
+    background: var(--primary-light);
     color: var(--primary-color);
 }
 
 /* Mobil Uyumluluk */
 @media (max-width: 768px) {
     .navbar {
-        padding: 0.75rem 1rem;
+        padding: 0 1rem;
     }
 
-    .menu-toggle {
+    .navbar-toggle {
         display: block;
     }
 
@@ -98,15 +93,20 @@
         flex-direction: column;
         gap: 0.5rem;
         box-shadow: var(--shadow);
-        display: none;
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s;
     }
 
     .navbar-menu.active {
-        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
     }
 
-    .navbar-item {
-        padding: 0.75rem 1rem;
+    .navbar-menu a {
+        width: 100%;
     }
 }
 

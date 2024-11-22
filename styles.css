@@ -37,6 +37,8 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
+    padding-top: 64px; /* Navbar yüksekliği kadar padding */
+    min-height: 100vh;
 }
 
 /* Ana İçerik */
@@ -64,9 +66,13 @@ body {
 
 /* Filtreler */
 .filters {
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
     display: flex;
     gap: 1rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -91,7 +97,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 1rem;
-    background: var(--surface-color);
+    background: var(--background-color);
 }
 
 .search-box input:focus {
@@ -113,6 +119,7 @@ body {
     color: var(--text-color);
     font-size: 1rem;
     cursor: pointer;
+    min-width: 200px;
 }
 
 .filter-group select:focus {
@@ -125,6 +132,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+    margin-top: 2rem;
 }
 
 .document-card {
@@ -201,6 +209,7 @@ body {
     justify-content: flex-end;
     border-top: 1px solid var(--border-color);
     padding-top: 1rem;
+    margin-top: auto;
 }
 
 .btn-icon {
@@ -234,19 +243,26 @@ body {
     cursor: pointer;
     text-decoration: none;
     transition: all 0.3s;
+    background: var(--primary-color);
+    color: white;
 }
 
 .btn i {
     font-size: 1.25rem;
 }
 
-.btn-primary {
-    background: var(--primary-color);
-    color: white;
+.btn:hover {
+    background: var(--primary-dark);
 }
 
-.btn-primary:hover {
-    background: var(--primary-dark);
+.btn-secondary {
+    background: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--hover-color);
 }
 
 /* Mobil Uyumluluk */
@@ -256,6 +272,7 @@ body {
     }
 
     .filters {
+        padding: 1rem;
         flex-direction: column;
     }
 
@@ -265,10 +282,12 @@ body {
 
     .filter-group {
         width: 100%;
+        flex-direction: column;
     }
 
     .filter-group select {
-        flex: 1;
+        width: 100%;
+        min-width: unset;
     }
 
     .btn {
@@ -279,4 +298,33 @@ body {
     .document-grid {
         grid-template-columns: 1fr;
     }
+
+    .document-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Boş Durum */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
 }
