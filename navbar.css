@@ -25,6 +25,7 @@
 
 .navbar-brand i {
     font-size: 2rem;
+    color: var(--primary-color);
 }
 
 .navbar-toggle {
@@ -71,6 +72,15 @@
 .navbar-menu a.active {
     background: var(--primary-light);
     color: var(--primary-color);
+}
+
+.btn-back {
+    color: var(--text-color) !important;
+}
+
+.btn-back:hover {
+    background: var(--hover-color);
+    color: var(--text-color) !important;
 }
 
 /* Mobil Uyumluluk */
