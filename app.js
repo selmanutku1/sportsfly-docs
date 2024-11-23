@@ -102,20 +102,139 @@ function requestApproval(docId) {
     const docIndex = documents.findIndex(doc => doc.id === docId);
     
     if (docIndex !== -1) {
+        const doc = documents[docIndex];
+        
+        // Onay talebi modalını göster
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>Onay Talebi</h2>
+                <p><strong>${doc.athlete}</strong> sporcusunun <strong>${getDocumentTypeName(doc.type)}</strong> belgesi için onay talebi</p>
+                <div class="form-group">
+                    <label for="approverEmail">Onaylayacak Kişinin E-posta Adresi:</label>
+                    <input type="email" id="approverEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="approvalNote">Not (Opsiyonel):</label>
+                    <textarea id="approvalNote" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal()">İptal</button>
+                    <button class="btn btn-primary" onclick="sendApprovalRequest('${docId}')">Onay Talep Et</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+}
+
+// Modalı kapat
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+// Onay talebini gönder
+function sendApprovalRequest(docId) {
+    const approverEmail = document.getElementById('approverEmail').value;
+    const approvalNote = document.getElementById('approvalNote').value;
+    
+    if (!approverEmail) {
+        showNotification('Lütfen onaylayacak kişinin e-posta adresini girin', 'error');
+        return;
+    }
+    
+    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+    const docIndex = documents.findIndex(doc => doc.id === docId);
+    
+    if (docIndex !== -1) {
         documents[docIndex].status = 'pending';
+        documents[docIndex].approver = approverEmail;
+        documents[docIndex].approvalNote = approvalNote;
+        documents[docIndex].approvalRequestDate = new Date().toISOString();
+        
         localStorage.setItem('documents', JSON.stringify(documents));
         displayDocuments(documents);
         
+        // E-posta gönderme simülasyonu
+        simulateSendEmail(documents[docIndex], approverEmail);
+        
+        closeModal();
         showNotification('Onay talebi gönderildi');
     }
 }
 
+// Onay/Red modalını göster
+function showApprovalModal(docId) {
+    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+    const doc = documents.find(d => d.id === docId);
+    
+    if (!doc) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>Belge Onayı</h2>
+            <p><strong>${doc.athlete}</strong> sporcusunun <strong>${getDocumentTypeName(doc.type)}</strong> belgesi</p>
+            ${doc.approvalNote ? `<p class="approval-note">Not: ${doc.approvalNote}</p>` : ''}
+            <div class="form-group">
+                <label for="approvalComment">Yorum (Opsiyonel):</label>
+                <textarea id="approvalComment" rows="3"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" onclick="respondToApproval('${docId}', 'rejected')">Reddet</button>
+                <button class="btn btn-secondary" onclick="closeModal()">İptal</button>
+                <button class="btn btn-success" onclick="respondToApproval('${docId}', 'approved')">Onayla</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+// Onay/Red cevabı
+function respondToApproval(docId, response) {
+    const comment = document.getElementById('approvalComment').value;
+    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+    const docIndex = documents.findIndex(doc => doc.id === docId);
+    
+    if (docIndex !== -1) {
+        documents[docIndex].status = response;
+        documents[docIndex].approvalComment = comment;
+        documents[docIndex].approvalDate = new Date().toISOString();
+        
+        localStorage.setItem('documents', JSON.stringify(documents));
+        displayDocuments(documents);
+        
+        closeModal();
+        showNotification(`Belge ${response === 'approved' ? 'onaylandı' : 'reddedildi'}`);
+    }
+}
+
+// E-posta gönderme simülasyonu
+function simulateSendEmail(doc, approverEmail) {
+    console.log(`Onay talebi e-postası gönderiliyor...
+        Kime: ${approverEmail}
+        Konu: Belge Onay Talebi - ${doc.athlete}
+        İçerik: ${doc.athlete} sporcusunun ${getDocumentTypeName(doc.type)} belgesi için onay bekleniyor.
+        ${doc.approvalNote ? 'Not: ' + doc.approvalNote : ''}
+    `);
+}
+
 // Bildirim göster
-function showNotification(message) {
+function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.innerHTML = `
-        <i class="material-icons">info</i>
+        <i class="material-icons">${type === 'success' ? 'check_circle' : 'error'}</i>
         <span>${message}</span>
     `;
     
