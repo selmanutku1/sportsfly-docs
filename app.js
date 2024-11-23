@@ -33,6 +33,9 @@ function populateAthleteFilter() {
 function createDocumentCard(doc) {
     const card = document.createElement('div');
     card.className = 'document-card';
+
+    const hasTemplate = documentTemplates.hasOwnProperty(doc.type);
+
     card.innerHTML = `
         <div class="document-icon">
             <i class="material-icons">${getDocumentIcon(doc.type)}</i>
@@ -45,17 +48,32 @@ function createDocumentCard(doc) {
             <div class="file-name">${doc.fileName}</div>
         </div>
         <div class="document-actions">
+            ${hasTemplate ? `
+                <button class="btn-icon btn-template" onclick="window.open('${documentTemplates[doc.type]}', '_blank')" title="Form Şablonu">
+                    <i class="material-icons">description</i>
+                </button>
+                <button class="btn-icon btn-request" onclick="requestApproval('${doc.id}')" title="Onay Talep Et">
+                    <i class="material-icons">send</i>
+                </button>
+            ` : ''}
             <button class="btn-icon" onclick="viewDocument('${doc.id}')" title="Görüntüle">
                 <i class="material-icons">visibility</i>
             </button>
             <button class="btn-icon" onclick="downloadDocument('${doc.id}')" title="İndir">
                 <i class="material-icons">download</i>
             </button>
-            <button class="btn-icon" onclick="deleteDocument('${doc.id}')" title="Sil">
+            <button class="btn-icon btn-delete" onclick="deleteDocument('${doc.id}')" title="Sil">
                 <i class="material-icons">delete</i>
             </button>
         </div>
+        ${hasTemplate ? `
+        <div class="document-status ${doc.status ? doc.status : ''}">
+            <i class="material-icons">${getStatusIcon(doc.status)}</i>
+            <span>${getStatusText(doc.status)}</span>
+        </div>
+        ` : ''}
     `;
+
     return card;
 }
 
@@ -98,6 +116,34 @@ function formatDate(date) {
         month: 'long',
         day: 'numeric'
     });
+}
+
+// Belge durum simgesini al
+function getStatusIcon(status) {
+    switch(status) {
+        case 'pending':
+            return 'hourglass_empty';
+        case 'approved':
+            return 'check_circle';
+        case 'rejected':
+            return 'cancel';
+        default:
+            return 'radio_button_unchecked';
+    }
+}
+
+// Belge durum metnini al
+function getStatusText(status) {
+    switch(status) {
+        case 'pending':
+            return 'Onay Bekliyor';
+        case 'approved':
+            return 'Onaylandı';
+        case 'rejected':
+            return 'Reddedildi';
+        default:
+            return 'Onay Bekleniyor';
+    }
 }
 
 // Filtreleme işlemleri
@@ -216,6 +262,50 @@ function dataURItoBlob(dataURI) {
     }
     return new Blob([ab], { type: mimeString });
 }
+
+// Onay talep et
+function requestApproval(docId) {
+    const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+    const docIndex = documents.findIndex(doc => doc.id === docId);
+    
+    if (docIndex !== -1) {
+        documents[docIndex].status = 'pending';
+        localStorage.setItem('documents', JSON.stringify(documents));
+        displayDocuments(documents);
+        
+        // Bildirim göster
+        showNotification('Onay talebi gönderildi');
+    }
+}
+
+// Bildirim göster
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+        <i class="material-icons">info</i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Belge türlerine göre form şablonları
+const documentTemplates = {
+    'feragatname': 'https://docs.google.com/document/d/10yH1SYsJ3oN7-nS_A-W-RJ0CwkS6wLByVH1RKrQwZ84/edit?usp=sharing',
+    'vekaletname': 'https://docs.google.com/document/d/10yH1SYsJ3oN7-nS_A-W-RJ0CwkS6wLByVH1RKrQwZ84/edit?usp=sharing'
+};
 
 // Event Listeners
 documentTypeFilter.addEventListener('change', () => {
