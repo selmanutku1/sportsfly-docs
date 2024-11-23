@@ -264,12 +264,19 @@ body {
 }
 
 .btn-request {
-    color: var(--success-color);
+    color: #2196F3;
+}
+
+.btn-approve {
+    color: #4CAF50;
 }
 
 .btn-request:hover {
-    background: var(--success-color-light);
-    color: var(--success-color);
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.btn-approve:hover {
+    background-color: rgba(76, 175, 80, 0.1);
 }
 
 .btn-delete {

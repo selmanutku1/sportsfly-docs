@@ -74,19 +74,13 @@ function createDocumentCard(doc) {
             ` : ''}
         </div>
         <div class="document-actions">
-            ${hasTemplate ? `
-                <button class="btn-icon btn-template" onclick="window.open('${documentTemplates[doc.type]}', '_blank')" title="Form Şablonu">
-                    <i class="material-icons">description</i>
+            <button class="btn-icon btn-request" onclick="requestApproval('${doc.id}')" title="Onay Talep Et">
+                <i class="material-icons">send</i>
+            </button>
+            ${doc.status === 'pending' ? `
+                <button class="btn-icon btn-approve" onclick="showApprovalModal('${doc.id}')" title="Onayla/Reddet">
+                    <i class="material-icons">gavel</i>
                 </button>
-                ${doc.status === 'pending' ? `
-                    <button class="btn-icon" onclick="showApprovalModal('${doc.id}')" title="Onayla/Reddet">
-                        <i class="material-icons">gavel</i>
-                    </button>
-                ` : `
-                    <button class="btn-icon btn-request" onclick="requestApproval('${doc.id}')" title="Onay Talep Et">
-                        <i class="material-icons">send</i>
-                    </button>
-                `}
             ` : ''}
             <button class="btn-icon" onclick="viewDocument('${doc.id}')" title="Görüntüle">
                 <i class="material-icons">visibility</i>
