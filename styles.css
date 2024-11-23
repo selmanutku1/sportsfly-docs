@@ -501,6 +501,24 @@ body {
     font-style: italic;
 }
 
+/* Onay Bilgileri */
+.approval-info {
+    background: var(--hover-bg);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.approval-info > div {
+    margin-bottom: 4px;
+}
+
+.approval-info > div:last-child {
+    margin-bottom: 0;
+}
+
 /* Notification Types */
 .notification.error {
     background: var(--danger-color);

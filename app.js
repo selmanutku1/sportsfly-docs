@@ -65,15 +65,28 @@ function createDocumentCard(doc) {
             <div class="document-date">${formatDate(doc.date)}</div>
             ${doc.note ? `<div class="document-note">${doc.note}</div>` : ''}
             <div class="file-name">${doc.fileName}</div>
+            ${doc.approver ? `
+                <div class="approval-info">
+                    <div>Onaylayacak: ${doc.approver}</div>
+                    ${doc.approvalNote ? `<div>Not: ${doc.approvalNote}</div>` : ''}
+                    ${doc.approvalComment ? `<div>Yorum: ${doc.approvalComment}</div>` : ''}
+                </div>
+            ` : ''}
         </div>
         <div class="document-actions">
             ${hasTemplate ? `
                 <button class="btn-icon btn-template" onclick="window.open('${documentTemplates[doc.type]}', '_blank')" title="Form Şablonu">
                     <i class="material-icons">description</i>
                 </button>
-                <button class="btn-icon btn-request" onclick="requestApproval('${doc.id}')" title="Onay Talep Et">
-                    <i class="material-icons">send</i>
-                </button>
+                ${doc.status === 'pending' ? `
+                    <button class="btn-icon" onclick="showApprovalModal('${doc.id}')" title="Onayla/Reddet">
+                        <i class="material-icons">gavel</i>
+                    </button>
+                ` : `
+                    <button class="btn-icon btn-request" onclick="requestApproval('${doc.id}')" title="Onay Talep Et">
+                        <i class="material-icons">send</i>
+                    </button>
+                `}
             ` : ''}
             <button class="btn-icon" onclick="viewDocument('${doc.id}')" title="Görüntüle">
                 <i class="material-icons">visibility</i>
@@ -86,10 +99,10 @@ function createDocumentCard(doc) {
             </button>
         </div>
         ${hasTemplate ? `
-        <div class="document-status ${doc.status ? doc.status : ''}">
-            <i class="material-icons">${getStatusIcon(doc.status)}</i>
-            <span>${getStatusText(doc.status)}</span>
-        </div>
+            <div class="document-status ${doc.status || ''}">
+                <i class="material-icons">${getStatusIcon(doc.status)}</i>
+                <span>${getStatusText(doc.status)}</span>
+            </div>
         ` : ''}
     `;
     
