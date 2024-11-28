@@ -1,109 +1,107 @@
-/* Ana Renkler */
 :root {
     --primary-color: #2196F3;
     --primary-dark: #1976D2;
+    --primary-light: #BBDEFB;
+    --text-primary: #212121;
+    --text-secondary: #757575;
+    --background-light: #F5F5F5;
+    --border-color: #E0E0E0;
     --success-color: #4CAF50;
-    --danger-color: #F44336;
-    --text-primary: #2c3e50;
-    --text-secondary: #666;
-    --border-color: #e0e0e0;
-    --background-light: #f8f9fa;
+    --error-color: #F44336;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    background-color: var(--background-light);
-    color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
-    padding-top: 80px;
+    color: var(--text-primary);
+    background-color: var(--background-light);
 }
 
-/* Container */
 .container {
     max-width: 800px;
-    margin: 0 auto;
-    padding: 0 20px;
+    margin: 80px auto 40px;
+    padding: 24px;
 }
 
-/* Form Card */
 .form-card {
     background: white;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 40px;
-    margin-bottom: 40px;
+    padding: 32px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-card h2 {
-    color: var(--text-primary);
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0 0 40px 0;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .form-card h2 i {
     color: var(--primary-color);
-    font-size: 32px;
+    font-size: 28px;
 }
 
-/* Form Groups */
 .form-group {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .form-group label {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
-    color: var(--text-primary);
+    margin-bottom: 8px;
     font-weight: 500;
-    font-size: 16px;
+    color: var(--text-primary);
 }
 
 .form-group label i {
     color: var(--primary-color);
-    font-size: 20px;
 }
 
-.form-group select,
-.form-group textarea {
+input[type="text"],
+select,
+textarea {
     width: 100%;
-    padding: 16px;
+    padding: 12px 16px;
     border: 2px solid var(--border-color);
     border-radius: 12px;
     font-size: 16px;
     color: var(--text-primary);
-    background-color: white;
+    background: white;
     transition: all 0.2s ease;
 }
 
-.form-group select {
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+select {
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232c3e50'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23757575'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 16px center;
     background-size: 24px;
     padding-right: 48px;
 }
 
-.form-group select:hover,
-.form-group textarea:hover {
-    border-color: var(--primary-color);
-}
-
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
-    outline: none;
-}
-
-/* File Upload */
 .file-upload {
+    position: relative;
     margin-bottom: 32px;
 }
 
@@ -112,62 +110,92 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 48px;
+    gap: 8px;
+    padding: 32px;
     border: 2px dashed var(--border-color);
-    border-radius: 16px;
+    border-radius: 12px;
+    background: var(--background-light);
     cursor: pointer;
     transition: all 0.2s ease;
-    background-color: var(--background-light);
 }
 
-.file-upload label:hover {
+.file-upload label:hover,
+.file-upload.highlight label {
     border-color: var(--primary-color);
-    background-color: rgba(33, 150, 243, 0.05);
-}
-
-.file-upload label i {
-    font-size: 48px;
-    color: var(--primary-color);
-    margin-bottom: 16px;
-}
-
-.file-upload label span {
-    color: var(--text-primary);
-    font-size: 18px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.file-upload label .file-types {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-top: 8px;
+    background: var(--primary-light);
 }
 
 .file-upload input[type="file"] {
-    display: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.file-upload i {
+    font-size: 48px;
+    color: var(--primary-color);
+}
+
+.file-types {
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
 .file-preview {
     margin-top: 16px;
-    padding: 20px;
-    border-radius: 12px;
-    background-color: var(--background-light);
-    display: none;
 }
 
-.file-preview.active {
+.preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--background-light);
+    border-radius: 8px;
+}
+
+.preview-item i {
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+.file-info {
+    flex: 1;
+}
+
+.file-name {
     display: block;
-    border: 2px solid var(--success-color);
+    font-weight: 500;
+    margin-bottom: 4px;
 }
 
-/* Form Actions */
+.file-size {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.remove-file {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.remove-file:hover {
+    background: var(--border-color);
+    color: var(--error-color);
+}
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    margin-top: 40px;
-    padding-top: 32px;
+    margin-top: 32px;
+    padding-top: 24px;
     border-top: 2px solid var(--border-color);
 }
 
@@ -175,89 +203,59 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 16px 32px;
+    gap: 8px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 12px;
+    border-radius: 24px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 160px;
 }
 
 .btn i {
-    font-size: 24px;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+    font-size: 20px;
 }
 
 .btn-secondary {
-    background-color: var(--background-light);
+    background: var(--background-light);
     color: var(--text-secondary);
 }
 
 .btn-secondary:hover {
-    background-color: var(--border-color);
-    transform: translateY(-2px);
+    background: var(--border-color);
 }
 
-/* Responsive Design */
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
 @media (max-width: 768px) {
     .container {
-        padding: 0 16px;
+        padding: 16px;
     }
 
     .form-card {
         padding: 24px;
         border-radius: 12px;
-        margin-bottom: 24px;
     }
 
     .form-card h2 {
-        font-size: 24px;
-        margin-bottom: 32px;
-    }
-
-    .form-group {
-        margin-bottom: 24px;
-    }
-
-    .form-group label {
-        font-size: 14px;
-    }
-
-    .file-upload label {
-        padding: 32px;
-    }
-
-    .file-upload label i {
-        font-size: 40px;
-    }
-
-    .file-upload label span {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .form-actions {
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 32px;
-        padding-top: 24px;
+        flex-direction: column-reverse;
     }
 
     .btn {
         width: 100%;
-        padding: 14px 24px;
-        font-size: 14px;
     }
 }
