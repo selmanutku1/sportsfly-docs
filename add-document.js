@@ -1,18 +1,47 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Form ve dosya yükleme alanı
-    const form = document.getElementById('addDocumentForm');
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('documentFile');
-    const fileInfo = document.querySelector('.file-info');
-    const athleteSelect = document.getElementById('athlete');
+// DOM Elements
+const documentForm = document.getElementById('documentForm');
+const athleteSelect = document.getElementById('athlete');
+const documentTypeSelect = document.getElementById('documentType');
+const noteTextarea = document.getElementById('note');
+const fileInput = document.getElementById('file');
+const filePreview = document.getElementById('filePreview');
 
-    // Sporcu listesini yükle
+// Constants
+const ALLOWED_FILE_TYPES = {
+    'application/pdf': 'PDF',
+    'application/msword': 'DOC',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+    'image/jpeg': 'JPEG',
+    'image/jpg': 'JPG',
+    'image/png': 'PNG'
+};
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+// Initialize the form
+document.addEventListener('DOMContentLoaded', () => {
     loadAthletes();
+    setupFileUpload();
+    setupFormSubmission();
+});
 
-    // Form submit işlemi
-    form.addEventListener('submit', handleFormSubmit);
+// Load athletes from localStorage
+function loadAthletes() {
+    const athletes = JSON.parse(localStorage.getItem('athletes')) || [];
+    
+    athletes.forEach(athlete => {
+        const option = document.createElement('option');
+        option.value = athlete.id;
+        option.textContent = `${athlete.name} ${athlete.surname}`;
+        athleteSelect.appendChild(option);
+    });
+}
 
-    // Dosya sürükle-bırak işlemleri
+// Setup file upload functionality
+function setupFileUpload() {
+    const dropZone = fileInput.parentElement;
+
+    // Drag and drop events
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropZone.classList.add('dragover');
@@ -27,127 +56,152 @@ document.addEventListener('DOMContentLoaded', function() {
         dropZone.classList.remove('dragover');
         
         const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            fileInput.files = files;
-            updateFileInfo(files[0]);
+        if (files.length) {
+            handleFileSelection(files[0]);
         }
     });
 
-    // Dosya seçimi değiştiğinde
+    // Regular file input change
     fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            updateFileInfo(e.target.files[0]);
+        if (e.target.files.length) {
+            handleFileSelection(e.target.files[0]);
         }
     });
-});
+}
 
-function loadAthletes() {
-    const athleteSelect = document.getElementById('athlete');
-    const athletes = JSON.parse(localStorage.getItem('athletes') || '[]');
+// Handle file selection
+function handleFileSelection(file) {
+    // Validate file type
+    if (!ALLOWED_FILE_TYPES[file.type]) {
+        showError('Desteklenmeyen dosya türü. Lütfen PDF, DOC, DOCX, JPG veya PNG dosyası yükleyin.');
+        fileInput.value = '';
+        return;
+    }
 
-    athletes.forEach(athlete => {
-        const option = document.createElement('option');
-        option.value = athlete.id;
-        option.textContent = athlete.name;
-        athleteSelect.appendChild(option);
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+        showError('Dosya boyutu çok büyük. Maksimum dosya boyutu 10MB olmalıdır.');
+        fileInput.value = '';
+        return;
+    }
+
+    // Update file preview
+    filePreview.innerHTML = '';
+    filePreview.classList.add('active');
+
+    const fileInfo = document.createElement('div');
+    fileInfo.innerHTML = `
+        <div class="file-info">
+            <i class="material-icons">${getFileIcon(file.type)}</i>
+            <div>
+                <strong>${file.name}</strong>
+                <span>${formatFileSize(file.size)} - ${ALLOWED_FILE_TYPES[file.type]}</span>
+            </div>
+        </div>
+    `;
+    filePreview.appendChild(fileInfo);
+}
+
+// Setup form submission
+function setupFormSubmission() {
+    documentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+            const formData = await getFormData();
+            saveDocument(formData);
+            showSuccess('Belge başarıyla kaydedildi!');
+            resetForm();
+        } catch (error) {
+            showError(error.message);
+        }
     });
 }
 
-function handleFormSubmit(event) {
-    event.preventDefault();
+// Get form data
+async function getFormData() {
+    const athlete = athleteSelect.value;
+    const documentType = documentTypeSelect.value;
+    const note = noteTextarea.value.trim();
+    const file = fileInput.files[0];
 
-    // Form verilerini topla
-    const formData = new FormData(event.target);
-    const documentData = {
+    if (!athlete) throw new Error('Lütfen bir sporcu seçin.');
+    if (!documentType) throw new Error('Lütfen belge türü seçin.');
+    if (!file) throw new Error('Lütfen bir dosya seçin.');
+
+    const fileData = await readFileAsDataURL(file);
+
+    return {
         id: generateUniqueId(),
-        type: formData.get('documentType'),
-        athleteId: formData.get('athlete'),
-        date: formData.get('documentDate'),
-        note: formData.get('documentNote'),
-        fileName: formData.get('documentFile').name,
-        uploadDate: new Date().toISOString()
+        athleteId: athlete,
+        type: documentType,
+        note: note,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        fileData: fileData,
+        uploadDate: new Date().toISOString(),
+        status: 'pending',
+        approvalStatus: null,
+        approvalDate: null,
+        approver: null,
+        approvalNote: null
     };
+}
 
-    // Mevcut belgeleri al
-    let documents = JSON.parse(localStorage.getItem('documents') || '[]');
-    
-    // Yeni belgeyi ekle
+// Save document to localStorage
+function saveDocument(documentData) {
+    const documents = JSON.parse(localStorage.getItem('documents')) || [];
     documents.push(documentData);
-    
-    // LocalStorage'a kaydet
     localStorage.setItem('documents', JSON.stringify(documents));
-
-    // Başarı mesajı göster
-    showNotification('Belge başarıyla eklendi!', 'success');
-
-    // Ana sayfaya yönlendir
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1500);
 }
 
-function updateFileInfo(file) {
-    const fileInfo = document.querySelector('.file-info');
-    const size = (file.size / 1024 / 1024).toFixed(2); // MB cinsinden
-    fileInfo.textContent = `${file.name} (${size} MB)`;
-}
-
+// Helper Functions
 function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-function showNotification(message, type = 'info') {
-    // Mevcut bildirimi kaldır
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
+function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Dosya okunamadı.'));
+        reader.readAsDataURL(file);
+    });
+}
 
-    // Yeni bildirimi oluştur
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+function getFileIcon(fileType) {
+    const icons = {
+        'application/pdf': 'picture_as_pdf',
+        'application/msword': 'description',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'description',
+        'image/jpeg': 'image',
+        'image/jpg': 'image',
+        'image/png': 'image'
+    };
+    return icons[fileType] || 'insert_drive_file';
+}
 
-    // Bildirimi sayfaya ekle
-    document.body.appendChild(notification);
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
 
-    // CSS ekle
-    const style = document.createElement('style');
-    style.textContent = `
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 2rem;
-            border-radius: var(--border-radius);
-            background: var(--surface-color);
-            color: var(--text-color);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        .notification.success {
-            background: var(--success-color);
-            color: white;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+function showSuccess(message) {
+    // Implement your success notification here
+    alert(message);
+}
 
-    // Bildirimi otomatik kaldır
-    setTimeout(() => {
-        notification.remove();
-        style.remove();
-    }, 3000);
+function showError(message) {
+    // Implement your error notification here
+    alert(message);
+}
+
+function resetForm() {
+    documentForm.reset();
+    filePreview.innerHTML = '';
+    filePreview.classList.remove('active');
 }
