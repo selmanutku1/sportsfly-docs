@@ -3,97 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belge Ekle - SportsFly</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Yeni Belge Ekle - SportsFly Docs</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="add-document.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand"></div>
-        <div class="navbar-menu">
-            <a href="index.html" class="btn-back">
-                <i class="material-icons">arrow_back</i>
-                Geri Dön
+        <div class="nav-brand">
+            <a href="index.html">
+                <i class="material-icons">sports</i>
+                SportsFly Docs
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">
+                <i class="material-icons">home</i>
+                Ana Sayfa
+            </a>
+            <a href="add-athlete.html" class="nav-link">
+                <i class="material-icons">person_add</i>
+                Sporcu Ekle
+            </a>
+            <a href="add-document.html" class="nav-link active">
+                <i class="material-icons">note_add</i>
+                Belge Ekle
             </a>
         </div>
     </nav>
 
-    <!-- Ana İçerik -->
-    <main class="container">
-        <div class="page-header">
-            <h1>Yeni Belge Ekle</h1>
-            <p>Sporcular için yeni belge yükleyin ve yönetin.</p>
-        </div>
-
-        <form id="addDocumentForm" class="add-document-form">
-            <div class="form-grid">
-                <!-- Belge Türü -->
-                <div class="form-group">
-                    <label for="documentType">Belge Türü</label>
-                    <select id="documentType" name="documentType" required>
-                        <option value="">Belge türü seçin</option>
-                        <option value="healthReport">Sağlık Raporu</option>
-                        <option value="license">Sporcu Lisansı</option>
-                        <option value="education">Öğrenim Belgesi</option>
-                        <option value="parentPermission">Veli İzin Belgesi</option>
-                        <option value="resume">Özgeçmiş</option>
-                        <option value="contract">Sözleşme</option>
-                        <option value="idCopy">Kimlik Fotokopisi</option>
-                        <option value="powerOfAttorney">Vekaletname</option>
-                        <option value="waiver">Feragatname</option>
-                    </select>
-                </div>
-
-                <!-- Sporcu Seçimi -->
+    <div class="container">
+        <div class="form-card">
+            <h2><i class="material-icons">note_add</i> Yeni Belge Ekle</h2>
+            
+            <form id="documentForm">
                 <div class="form-group">
                     <label for="athlete">Sporcu</label>
-                    <select id="athlete" name="athlete" required>
-                        <option value="">Sporcu seçin</option>
+                    <select id="athlete" required>
+                        <option value="">Sporcu seçin...</option>
                     </select>
                 </div>
 
-                <!-- Belge Tarihi -->
                 <div class="form-group">
-                    <label for="documentDate">Belge Tarihi</label>
-                    <input type="date" id="documentDate" name="documentDate" required>
+                    <label for="documentType">Belge Türü</label>
+                    <select id="documentType" required>
+                        <option value="">Belge türü seçin...</option>
+                        <option value="saglik-raporu">Sağlık Raporu</option>
+                        <option value="sporcu-lisansi">Sporcu Lisansı</option>
+                        <option value="ogrenim-belgesi">Öğrenim Belgesi</option>
+                        <option value="veli-izin">Veli İzin Belgesi</option>
+                        <option value="ozgecmis">Özgeçmiş</option>
+                        <option value="sozlesme">Sözleşme</option>
+                        <option value="kimlik">Kimlik Fotokopisi</option>
+                        <option value="vekaletname">Vekaletname</option>
+                        <option value="feragatname">Feragatname</option>
+                    </select>
                 </div>
 
-                <!-- Notlar -->
-                <div class="form-group full-width">
-                    <label for="documentNote">Notlar</label>
-                    <textarea id="documentNote" name="documentNote" rows="3" placeholder="Belge hakkında notlar..."></textarea>
+                <div class="form-group">
+                    <label for="note">Not (Opsiyonel)</label>
+                    <textarea id="note" rows="3" placeholder="Belge hakkında not ekleyin..."></textarea>
                 </div>
 
-                <!-- Dosya Yükleme -->
-                <div class="form-group full-width">
-                    <label>Belge Dosyası</label>
-                    <div id="dropZone" class="drop-zone">
-                        <input type="file" id="documentFile" name="documentFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required hidden>
-                        <div class="drop-zone-content">
-                            <i class="material-icons">cloud_upload</i>
-                            <p>Dosyayı sürükleyip bırakın veya seçmek için tıklayın</p>
-                            <p class="file-info"></p>
-                        </div>
-                    </div>
+                <div class="form-group file-upload">
+                    <label for="file">
+                        <i class="material-icons">cloud_upload</i>
+                        <span>Dosya Seç veya Sürükle</span>
+                    </label>
+                    <input type="file" id="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                    <div id="filePreview" class="file-preview"></div>
                 </div>
-            </div>
 
-            <!-- Form Butonları -->
-            <div class="form-actions">
-                <button type="button" onclick="window.location.href='index.html'" class="btn btn-secondary">
-                    <i class="material-icons">arrow_back</i>
-                    Geri Dön
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="material-icons">save</i>
-                    Belgeyi Kaydet
-                </button>
-            </div>
-        </form>
-    </main>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">
+                        <i class="material-icons">arrow_back</i>
+                        İptal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">save</i>
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="add-document.js"></script>
 </body>
