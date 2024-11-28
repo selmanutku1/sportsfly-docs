@@ -17,19 +17,23 @@
 .nav-left, .nav-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .nav-home-btn, .nav-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 20px;
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 500;
+    font-size: 14px;
     transition: all 0.2s ease;
+    border: 2px solid transparent;
 }
 
 .nav-home-btn {
@@ -56,6 +60,7 @@
 
 .nav-btn.active:hover {
     background-color: var(--primary-dark);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
 }
 
 .nav-home-btn i, .nav-btn i {
@@ -73,7 +78,10 @@
     }
 
     .nav-home-btn, .nav-btn {
-        padding: 8px;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
     }
 
     .nav-home-btn i, .nav-btn i {
