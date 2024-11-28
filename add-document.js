@@ -1,6 +1,5 @@
 // DOM Elements
 const documentForm = document.getElementById('documentForm');
-const athleteSelect = document.getElementById('athlete');
 const documentTypeSelect = document.getElementById('documentType');
 const noteTextarea = document.getElementById('note');
 const fileInput = document.getElementById('file');
@@ -20,22 +19,9 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 // Initialize the form
 document.addEventListener('DOMContentLoaded', () => {
-    loadAthletes();
     setupFileUpload();
     setupFormSubmission();
 });
-
-// Load athletes from localStorage
-function loadAthletes() {
-    const athletes = JSON.parse(localStorage.getItem('athletes')) || [];
-    
-    athletes.forEach(athlete => {
-        const option = document.createElement('option');
-        option.value = athlete.id;
-        option.textContent = `${athlete.name} ${athlete.surname}`;
-        athleteSelect.appendChild(option);
-    });
-}
 
 // Setup file upload functionality
 function setupFileUpload() {
@@ -120,12 +106,10 @@ function setupFormSubmission() {
 
 // Get form data
 async function getFormData() {
-    const athlete = athleteSelect.value;
     const documentType = documentTypeSelect.value;
     const note = noteTextarea.value.trim();
     const file = fileInput.files[0];
 
-    if (!athlete) throw new Error('Lütfen bir sporcu seçin.');
     if (!documentType) throw new Error('Lütfen belge türü seçin.');
     if (!file) throw new Error('Lütfen bir dosya seçin.');
 
@@ -133,7 +117,6 @@ async function getFormData() {
 
     return {
         id: generateUniqueId(),
-        athleteId: athlete,
         type: documentType,
         note: note,
         fileName: file.name,
