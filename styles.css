@@ -44,35 +44,141 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
-    padding-top: 64px;
-    min-height: 100vh;
+    color: var(--text-primary);
+    background-color: var(--background-color);
 }
 
-/* Ana İçerik */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
+    margin: 80px auto 0;
+    padding: 24px;
 }
 
-.page-header {
-    margin-bottom: 2rem;
-    text-align: center;
+h1 {
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 32px;
+    color: var(--text-primary);
 }
 
-.page-header h1 {
-    font-size: 2rem;
+h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    background-color: var(--primary-light);
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.card-icon i {
+    font-size: 24px;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
 }
 
-.page-header p {
+.card-content h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.card-content p {
     color: var(--text-secondary);
-    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.card-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.card-button:hover {
+    background-color: var(--primary-dark);
+}
+
+.card-button i {
+    font-size: 20px;
+}
+
+.recent-documents {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.documents-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.document-card {
+    background: var(--background-color);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.document-card:hover {
+    background-color: var(--border-color);
+}
+
+.document-icon {
+    color: var(--primary-color);
+}
+
+.document-info h4 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.document-info p {
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
 /* Filtreler */
@@ -574,5 +680,23 @@ body {
 
     .document-card {
         margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
     }
 }

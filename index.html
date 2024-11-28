@@ -3,86 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportsFly - Belge Yönetim Sistemi</title>
+    <title>Belge Yönetim Sistemi</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="navbar.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand"></div>
-        <div class="navbar-menu">
-            <a href="javascript:history.back()" class="btn-back">
-                <i class="material-icons">arrow_back</i>
-                Geri Dön
+        <div class="nav-left">
+            <a href="index.html" class="nav-home-btn">
+                <i class="material-icons">home</i>
+                <span>Ana Sayfa</span>
             </a>
-            <a href="add-document.html" class="btn btn-primary">
-                <i class="material-icons">add_circle</i>
-                Yeni Belge
+        </div>
+        <div class="nav-right">
+            <a href="add-document.html" class="nav-btn">
+                <i class="material-icons">note_add</i>
+                <span>Yeni Belge</span>
             </a>
         </div>
     </nav>
 
-    <!-- Ana İçerik -->
-    <div class="container">
-        <!-- Başlık -->
-        <header class="page-header">
-            <h1>Belge Yönetim Sistemi</h1>
-            <p>Tüm sporcuların belgelerini tek bir yerden yönetin</p>
-        </header>
-
-        <!-- Filtreler -->
-        <div class="filters">
-            <div class="search-box">
-                <i class="material-icons">search</i>
-                <input type="text" id="searchInput" placeholder="Belge veya sporcu ara...">
+    <main class="container">
+        <h1>Belge Yönetim Sistemi</h1>
+        
+        <div class="dashboard">
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="material-icons">description</i>
+                </div>
+                <div class="card-content">
+                    <h3>Belgeler</h3>
+                    <p>Tüm belgelerinizi tek bir yerden yönetin</p>
+                    <a href="add-document.html" class="card-button">
+                        <i class="material-icons">add</i>
+                        Yeni Belge Ekle
+                    </a>
+                </div>
             </div>
-            <div class="filter-group">
-                <select id="documentTypeFilter">
-                    <option value="">Belge Türü</option>
-                    <option value="saglik-raporu">Sağlık Raporu</option>
-                    <option value="sporcu-lisansi">Sporcu Lisansı</option>
-                    <option value="ogrenim-belgesi">Öğrenim Belgesi</option>
-                    <option value="veli-izin">Veli İzin Belgesi</option>
-                    <option value="ozgecmis">Özgeçmiş</option>
-                    <option value="sozlesme">Sözleşme</option>
-                    <option value="kimlik">Kimlik Fotokopisi</option>
-                    <option value="vekaletname">Vekaletname</option>
-                    <option value="feragatname">Feragatname</option>
-                </select>
-                <select id="athleteFilter">
-                    <option value="">Sporcu</option>
-                </select>
-                <select id="dateFilter">
-                    <option value="">Tarih</option>
-                    <option value="today">Bugün</option>
-                    <option value="week">Bu Hafta</option>
-                    <option value="month">Bu Ay</option>
-                    <option value="year">Bu Yıl</option>
-                </select>
-                <button id="applyFilters" class="btn btn-secondary">
-                    <i class="material-icons">filter_list</i>
-                    <span>Filtrele</span>
-                </button>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="material-icons">folder</i>
+                </div>
+                <div class="card-content">
+                    <h3>Belge Arşivi</h3>
+                    <p>Arşivlenmiş belgelerinize erişin</p>
+                    <a href="#" class="card-button" id="viewArchiveBtn">
+                        <i class="material-icons">folder_open</i>
+                        Arşivi Görüntüle
+                    </a>
+                </div>
             </div>
         </div>
 
-        <!-- Belge Grid -->
-        <div class="document-grid" id="documentGrid">
-            <!-- Boş Durum -->
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <i class="material-icons">folder_open</i>
-                <h2>Henüz belge yok</h2>
-                <p>Yeni belge eklemek için "Yeni Belge" butonuna tıklayın.</p>
-                <a href="add-document.html" class="btn">
-                    <i class="material-icons">add</i>
-                    Yeni Belge Ekle
-                </a>
+        <div class="recent-documents">
+            <h2>Son Eklenen Belgeler</h2>
+            <div id="recentDocsList" class="documents-list">
+                <!-- Belgeler JavaScript ile buraya eklenecek -->
             </div>
         </div>
-    </div>
+    </main>
 
-    <script src="app.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>
